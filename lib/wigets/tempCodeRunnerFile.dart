@@ -44,14 +44,12 @@ class Chart extends StatelessWidget {
       elevation: 6,
       margin: EdgeInsets.all(20),
       child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceAround,
+        // mainAxisAlignment: MainAxisAlignment.spaceAround,
         children: grupedTransactionValues.map((data) {
           return ChartBar(
             label: (data['day'] as String),
             spendingAmount: (data['amount'] as double),
-            spendingPctOfTotal: (totalSpending == 0.0)
-                ? 0.0
-                : (data['amount'] as double) / totalSpending,
+            spendingPctOfTotal: (data['amount'] as double) ,
           );
         }).toList(),
       ),
