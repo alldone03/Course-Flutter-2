@@ -28,3 +28,10 @@
 //     expect(find.text('1'), findsOneWidget);
 //   });
 // }
+void main() {
+  int i = 1;
+  print("${i}");
+  i += 1;
+
+  print("${i += 1}");
+}
