@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_complete_guide2/models/transaction.dart';
+import 'package:flutter_complete_guide2/wigets/chart.dart';
 import 'package:flutter_complete_guide2/wigets/new_transaction.dart';
 import 'package:flutter_complete_guide2/wigets/transaction_list.dart';
 
@@ -44,6 +45,15 @@ class HomeApp extends StatefulWidget {
     //     amount: 16.53,
     //     date: DateTime.now())
   ];
+  List<Transaction> get _recentTransaction {
+    return _userTransactions.where((tx) {
+      return tx.date.isAfter(
+        DateTime.now().subtract(
+          Duration(days: 7),
+        ),
+      );
+    }).toList();
+  }
 
   @override
   State<HomeApp> createState() => _HomeAppState();
@@ -96,17 +106,9 @@ class _HomeAppState extends State<HomeApp> {
       ),
       body: SingleChildScrollView(
         child: Column(
-          // mainAxisAlignment: MainAxisAlignment.start,
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
-            Container(
-              width: double.infinity,
-              child: Card(
-                color: Colors.blue,
-                child: Text("Chart"),
-                elevation: 5,
-              ),
-            ),
+            Chart(recentTransaction: widget._recentTransaction),
             TransactionList(transactions: widget._userTransactions)
           ],
         ),
