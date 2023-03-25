@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 
 class NewTransaction extends StatefulWidget {
   final Function myFunction;
@@ -10,18 +11,39 @@ class NewTransaction extends StatefulWidget {
 
 class _NewTransactionState extends State<NewTransaction> {
   // const NewTransaction ({super.key});
-  final titleController = TextEditingController();
-  final amountController = TextEditingController();
+  final _titleController = TextEditingController();
+  final _amountController = TextEditingController();
+  DateTime? _selectedDate;
 
-  submitData() {
+  _submitData() {
     try {
-      final enteredTitle = titleController.text;
-      final enteredAmount = double.parse(amountController.text);
+      if (_amountController.text.isEmpty) {
+        return;
+      }
+      final enteredTitle = _titleController.text;
+      final enteredAmount = double.parse(_amountController.text);
       if (enteredTitle.isEmpty || enteredAmount <= 0) {
         return NewTransaction(myFunction: widget.myFunction);
       }
-      widget.myFunction(enteredTitle, enteredAmount);
+      widget.myFunction(enteredTitle, enteredAmount, _selectedDate);
     } catch (e) {}
+  }
+
+  _showDateTime() {
+    showDatePicker(
+            context: context,
+            initialDate: DateTime.now(),
+            firstDate: DateTime.now().subtract(Duration(days: 5)),
+            lastDate: DateTime.now().add(Duration(days: 5)))
+        .then((value) {
+      if (value == null) {
+        return;
+      }
+      setState(() {
+        _selectedDate = value;
+      });
+      print(_selectedDate);
+    });
   }
 
   @override
@@ -31,25 +53,65 @@ class _NewTransactionState extends State<NewTransaction> {
       child: Container(
         padding: EdgeInsets.all(10),
         child: Column(
-          crossAxisAlignment: CrossAxisAlignment.end,
           children: [
-            TextField(
-              controller: titleController,
-              decoration: InputDecoration(labelText: "Title"),
-              keyboardType: TextInputType.text,
-              onSubmitted: (_) => submitData,
+            Container(
+              width: 50,
+              height: 10,
+              // color: Colors.red,
+              decoration: BoxDecoration(
+                  borderRadius: BorderRadius.all(
+                    Radius.circular(10),
+                  ),
+                  border: Border.all(color: Colors.grey[400]!),
+                  color: Colors.grey[400]),
             ),
-            TextField(
-              controller: amountController,
-              decoration: InputDecoration(labelText: "Amount"),
-              keyboardType: TextInputType.number,
-              onSubmitted: (_) => submitData,
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.end,
+              children: [
+                TextField(
+                  controller: _titleController,
+                  decoration: InputDecoration(labelText: "Title"),
+                  keyboardType: TextInputType.text,
+                  onSubmitted: (_) => _submitData,
+                ),
+                TextField(
+                  controller: _amountController,
+                  decoration: InputDecoration(labelText: "Amount"),
+                  keyboardType: TextInputType.number,
+                  onSubmitted: (_) => _submitData,
+                ),
+                SizedBox(
+                  height: 10,
+                ),
+                Row(
+                  children: [
+                    Expanded(
+                      child: Text(
+                        (_selectedDate == null)
+                            ? "No Choose"
+                            : "Date: ${DateFormat.yMMMMd().format(_selectedDate!)}",
+                        style: TextStyle(
+                            // fontSize: 20,
+                            fontFamily: "Quicksand",
+                            fontWeight: FontWeight.bold),
+                      ),
+                    ),
+                    TextButton(
+                      onPressed: _showDateTime,
+                      child: Text(
+                        "Choose Date",
+                        style: TextStyle(fontSize: 15),
+                      ),
+                    ),
+                  ],
+                ),
+                TextButton(
+                  onPressed: _submitData,
+                  style: TextButton.styleFrom(foregroundColor: Colors.purple),
+                  child: Text("Add Transaction"),
+                )
+              ],
             ),
-            TextButton(
-              onPressed: submitData,
-              style: TextButton.styleFrom(foregroundColor: Colors.purple),
-              child: Text("Add Transaction"),
-            )
           ],
         ),
       ),

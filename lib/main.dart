@@ -31,6 +31,46 @@ void main() => runApp(
       ),
     );
 
+class TestConfig extends StatelessWidget {
+  const TestConfig({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: Text("hello"),
+      ),
+      body: Container(
+        child: Row(
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            Container(
+              color: Colors.red,
+              height: 100,
+              width: 230,
+            ),
+            Flexible(
+              fit: FlexFit.tight,
+              child: Container(
+                color: Colors.blue,
+                height: 100,
+                width: 200,
+              ),
+            ),
+            Flexible(
+              fit: FlexFit.tight,
+              child: Container(
+                color: Colors.green,
+                height: 100,
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
 class HomeApp extends StatefulWidget {
   final List<Transaction> _userTransactions = [
     // Transaction(
@@ -60,12 +100,12 @@ class HomeApp extends StatefulWidget {
 }
 
 class _HomeAppState extends State<HomeApp> {
-  void _addNewTransaction(String title, double amount) {
+  void _addNewTransaction(String title, double amount, DateTime date) {
     final newTX = Transaction(
         id: DateTime.now().toString(),
         title: title,
         amount: amount,
-        date: DateTime.now());
+        date: date);
 
     setState(() {
       widget._userTransactions.add(newTX);
