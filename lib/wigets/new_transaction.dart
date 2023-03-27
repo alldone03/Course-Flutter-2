@@ -33,8 +33,8 @@ class _NewTransactionState extends State<NewTransaction> {
     showDatePicker(
             context: context,
             initialDate: DateTime.now(),
-            firstDate: DateTime.now().subtract(Duration(days: 5)),
-            lastDate: DateTime.now().add(Duration(days: 5)))
+            firstDate: DateTime.now().subtract(Duration(days: 3)),
+            lastDate: DateTime.now().add(Duration(days: 3)))
         .then((value) {
       if (value == null) {
         return;
@@ -49,8 +49,13 @@ class _NewTransactionState extends State<NewTransaction> {
   @override
   Widget build(BuildContext context) {
     return Card(
-      elevation: 5,
+      elevation: 0,
+      shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.only(
+              topLeft: Radius.circular(25), topRight: Radius.circular(25))),
+      color: Colors.transparent,
       child: Container(
+        color: Colors.transparent,
         padding: EdgeInsets.all(10),
         child: Column(
           children: [
